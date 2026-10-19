@@ -1,0 +1,47 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Ma playlist</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if (favorites$ | async; as favorites) {
+    @if (favorites.length > 0) {
+      <ion-list>
+        @for (movie of favorites; track movie.id) {
+          <ion-item-sliding #sliding>
+            <ion-item>
+              <ion-thumbnail slot="start">
+                @if (movie.posterUrl) {
+                  <img [src]="movie.posterUrl" [alt]="movie.title" />
+                } @else {
+                  <ion-icon name="film-outline"></ion-icon>
+                }
+              </ion-thumbnail>
+              <ion-label>
+                <h2>{{ movie.title }}</h2>
+                @if (movie.releaseDate) {
+                  <p>{{ movie.releaseDate }}</p>
+                }
+              </ion-label>
+              <ion-button slot="end" fill="clear" color="danger" (click)="remove(movie)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-item-options side="end">
+              <ion-item-option color="danger" (click)="remove(movie, sliding)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+          </ion-item-sliding>
+        }
+      </ion-list>
+    } @else {
+      <div class="empty">
+        <ion-icon name="heart-outline"></ion-icon>
+        <h3>Votre playlist est vide</h3>
+        <p>Ajoutez des films depuis l'onglet « Films ».</p>
+      </div>
+    }
+  }
+</ion-content>

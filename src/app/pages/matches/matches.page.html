@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mes matchs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (state$ | async; as state) {
+    <ion-note class="hint">
+      Utilisateurs dont la playlist correspond à plus de {{ threshold }}% à la vôtre.
+    </ion-note>
+
+    @if (!state.hasFavorites) {
+      <div class="empty">
+        <ion-icon name="heart-outline"></ion-icon>
+        <h3>Ajoutez des favoris</h3>
+        <p>Le matching nécessite au moins un film dans votre playlist.</p>
+      </div>
+    } @else if (state.matches.length === 0) {
+      <div class="empty">
+        <ion-icon name="people-outline"></ion-icon>
+        <h3>Aucun match pour le moment</h3>
+        <p>Personne ne dépasse {{ threshold }}% de correspondance avec vous.</p>
+      </div>
+    }
+
+    @for (match of state.matches; track match.user.uid) {
+      <ion-card class="match-card">
+        <ion-card-header>
+          <div class="match-head">
+            <ion-avatar>
+              @if (match.user.photoUrl) {
+                <img [src]="match.user.photoUrl" [alt]="match.user.prenom" />
+              } @else {
+                <ion-icon name="person-circle-outline"></ion-icon>
+              }
+            </ion-avatar>
+            <div class="names">
+              <ion-card-title>{{ match.user.prenom }} {{ match.user.nom }}</ion-card-title>
+              <ion-note>{{ match.user.age }} ans</ion-note>
+            </div>
+            <ion-badge color="success">{{ match.rate }}%</ion-badge>
+          </div>
+          <ion-progress-bar color="success" [value]="match.rate / 100"></ion-progress-bar>
+        </ion-card-header>
+        <ion-card-content>
+          <p class="common-count">
+            <ion-icon name="film-outline"></ion-icon>
+            {{ match.commonMovies.length }} film(s) en commun
+          </p>
+          <div class="chips">
+            @for (movie of match.commonMovies; track movie.id) {
+              <ion-chip>
+                <ion-label>{{ movie.title }}</ion-label>
+              </ion-chip>
+            }
+          </div>
+        </ion-card-content>
+      </ion-card>
+    }
+  } @else {
+    <div class="center"><ion-spinner name="crescent"></ion-spinner></div>
+  }
+</ion-content>

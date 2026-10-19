@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Mon profil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (currentUser$ | async; as user) {
+    <div class="profile-head">
+      <ion-avatar>
+        @if (user.photoUrl) {
+          <img [src]="user.photoUrl" [alt]="user.prenom" />
+        } @else {
+          <ion-icon name="person-circle-outline"></ion-icon>
+        }
+      </ion-avatar>
+      <ion-button size="small" fill="outline" [disabled]="updatingPhoto" (click)="changePhoto(user)">
+        <ion-icon slot="start" name="camera-outline"></ion-icon>
+        Changer la photo
+      </ion-button>
+      <h2>{{ user.prenom }} {{ user.nom }}</h2>
+      <ion-badge [color]="user.role === 'admin' ? 'tertiary' : 'medium'">
+        {{ user.role === 'admin' ? 'Administrateur' : 'Utilisateur' }}
+      </ion-badge>
+    </div>
+
+    <ion-list>
+      <ion-item>
+        <ion-icon slot="start" name="mail-outline"></ion-icon>
+        <ion-label>Email</ion-label>
+        <ion-note slot="end">{{ user.email }}</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="person-outline"></ion-icon>
+        <ion-label>Âge</ion-label>
+        <ion-note slot="end">{{ user.age }} ans</ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="start" name="heart-outline"></ion-icon>
+        <ion-label>Films favoris</ion-label>
+        <ion-note slot="end">{{ user.favorites.length }}</ion-note>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" color="danger" (click)="logout()" class="logout">
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      Se déconnecter
+    </ion-button>
+  } @else {
+    <p class="loading">Chargement du profil…</p>
+  }
+</ion-content>

@@ -1,0 +1,146 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Administration</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-segment [value]="tab" (ionChange)="onTabChange($event)">
+      <ion-segment-button value="movies">
+        <ion-label>Films ({{ movies.length }})</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="users">
+        <ion-label>Utilisateurs ({{ users.length }})</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (tab === 'movies') {
+    <form #movieForm="ngForm" (ngSubmit)="addMovie(movieForm)">
+      <ion-list>
+        <ion-list-header>
+          <ion-label>Ajouter un film</ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-input label="Titre *" labelPlacement="floating" name="title" [(ngModel)]="newMovie.title" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-textarea
+            label="Synopsis"
+            labelPlacement="floating"
+            name="overview"
+            [autoGrow]="true"
+            [(ngModel)]="newMovie.overview"
+          ></ion-textarea>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            label="URL de l'affiche"
+            labelPlacement="floating"
+            name="posterUrl"
+            type="url"
+            [(ngModel)]="newMovie.posterUrl"
+          ></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-input
+            label="Date de sortie"
+            labelPlacement="stacked"
+            name="releaseDate"
+            type="date"
+            [(ngModel)]="newMovie.releaseDate"
+          ></ion-input>
+        </ion-item>
+      </ion-list>
+
+      <div class="actions">
+        <ion-button expand="block" type="submit" [disabled]="saving">
+          <ion-icon slot="start" name="add-outline"></ion-icon>
+          Ajouter au catalogue
+        </ion-button>
+        @if (tmdbEnabled) {
+          <ion-button expand="block" fill="outline" color="secondary" (click)="importPopular()" [disabled]="importing">
+            <ion-icon slot="start" name="cloud-download-outline"></ion-icon>
+            Importer les films populaires (TMDB)
+          </ion-button>
+        } @else {
+          <ion-note>Renseignez tmdbApiKey dans environment.ts pour importer les films TMDB.</ion-note>
+        }
+      </div>
+    </form>
+
+    <ion-list>
+      <ion-list-header>
+        <ion-label>Catalogue</ion-label>
+      </ion-list-header>
+      @if (loadingMovies) {
+        <div class="center"><ion-spinner name="crescent"></ion-spinner></div>
+      }
+      @for (movie of movies; track movie.id) {
+        <ion-item>
+          <ion-thumbnail slot="start">
+            @if (movie.posterUrl) {
+              <img [src]="movie.posterUrl" [alt]="movie.title" />
+            } @else {
+              <ion-icon name="film-outline"></ion-icon>
+            }
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ movie.title }}</h2>
+            <p>{{ movie.overview || 'Pas de description.' }}</p>
+            <ion-note>{{ movie.source === 'tmdb' ? 'TMDB' : 'Ajout admin' }}</ion-note>
+          </ion-label>
+          <ion-button slot="end" fill="clear" color="danger" (click)="removeMovie(movie)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-button>
+        </ion-item>
+      } @empty {
+        @if (!loadingMovies) {
+          <ion-item>
+            <ion-label>Catalogue vide.</ion-label>
+          </ion-item>
+        }
+      }
+    </ion-list>
+  } @else {
+    @if (loadingUsers) {
+      <div class="center"><ion-spinner name="crescent"></ion-spinner></div>
+    }
+    <ion-list>
+      @for (user of users; track user.uid) {
+        <ion-item>
+          <ion-avatar slot="start">
+            @if (user.photoUrl) {
+              <img [src]="user.photoUrl" [alt]="user.prenom" />
+            } @else {
+              <ion-icon name="person-circle-outline"></ion-icon>
+            }
+          </ion-avatar>
+          <ion-label>
+            <h2>
+              {{ user.prenom }} {{ user.nom }}
+              @if (user.role === 'admin') {
+                <ion-badge color="tertiary">admin</ion-badge>
+              }
+            </h2>
+            <p>{{ user.email }} · {{ user.age }} ans</p>
+            <p>
+              @if (user.isDisabled) {
+                <ion-note color="danger">Désactivé</ion-note>
+              } @else {
+                <ion-note color="success">Actif</ion-note>
+              }
+            </p>
+          </ion-label>
+          <ion-toggle
+            slot="end"
+            aria-label="Compte actif"
+            [checked]="!user.isDisabled"
+            [disabled]="user.uid === currentUid || pendingUsers.has(user.uid)"
+            (ionChange)="toggleDisabled(user, $event)"
+          ></ion-toggle>
+        </ion-item>
+      }
+    </ion-list>
+  }
+</ion-content>

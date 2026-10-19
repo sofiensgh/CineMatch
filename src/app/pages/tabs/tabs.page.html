@@ -1,0 +1,30 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+    <ion-tab-button tab="home">
+      <ion-icon name="film-outline"></ion-icon>
+      <ion-label>Films</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="favorites">
+      <ion-icon name="heart-outline"></ion-icon>
+      <ion-label>Playlist</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="matches">
+      <ion-icon name="people-outline"></ion-icon>
+      <ion-label>Matchs</ion-label>
+    </ion-tab-button>
+
+    @if (isAdmin$ | async) {
+      <ion-tab-button tab="admin">
+        <ion-icon name="shield-outline"></ion-icon>
+        <ion-label>Admin</ion-label>
+      </ion-tab-button>
+    }
+
+    <ion-tab-button tab="profile">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Profil</ion-label>
+    </ion-tab-button>
+  </ion-tab-bar>
+</ion-tabs>

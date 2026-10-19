@@ -1,0 +1,29 @@
+ion-thumbnail {
+  --size: 56px;
+  --border-radius: 8px;
+}
+
+ion-thumbnail img {
+  object-fit: cover;
+}
+
+ion-thumbnail ion-icon {
+  font-size: 1.6rem;
+  color: var(--ion-color-medium);
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 60%;
+  color: var(--ion-color-medium);
+  padding: 24px;
+}
+
+.empty ion-icon {
+  font-size: 3.5rem;
+  margin-bottom: 8px;
+}

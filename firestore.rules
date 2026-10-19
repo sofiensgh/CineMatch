@@ -1,0 +1,53 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function myProfile() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isActive() {
+      return signedIn()
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && myProfile().isDisabled == false;
+    }
+
+    function isAdmin() {
+      return isActive() && myProfile().role == 'admin';
+    }
+
+    match /users/{uid} {
+      allow read: if signedIn();
+
+      allow create: if signedIn()
+        && request.auth.uid == uid
+        && request.resource.data.isDisabled == false
+        && request.resource.data.favorites.size() == 0
+        && (request.resource.data.role == 'user'
+          || (request.resource.data.role == 'admin'
+            && request.auth.token.email == 'admin@cinematch.com'));
+
+      allow update: if (isActive()
+          && request.auth.uid == uid
+          && !request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['uid', 'email', 'role', 'isDisabled']))
+        || (isAdmin()
+          && request.auth.uid != uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isDisabled']));
+
+      allow delete: if false;
+    }
+
+    match /movies/{movieId} {
+      allow read: if signedIn();
+      allow create: if isAdmin()
+        || (isActive() && movieId.matches('tmdb-[0-9]+') && request.resource.data.source == 'tmdb');
+      allow update, delete: if isAdmin();
+    }
+  }
+}

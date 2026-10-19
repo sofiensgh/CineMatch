@@ -1,0 +1,75 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>CineMatch</ion-title>
+  </ion-toolbar>
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Rechercher un film"
+      [debounce]="250"
+      (ionInput)="onSearch($event)"
+    ></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  @if (loading) {
+    <div class="center"><ion-spinner name="crescent"></ion-spinner></div>
+  } @else {
+    <ion-note class="hint">
+      @if (query.trim()) {
+        {{ displayed.length }} résultat(s) pour « {{ query }} »
+      } @else {
+        {{ displayed.length }} film(s) disponibles
+      }
+      @if (!tmdbEnabled) {
+        · catalogue CineMatch
+      }
+    </ion-note>
+
+    @if (searching) {
+      <div class="center"><ion-spinner name="dots"></ion-spinner></div>
+    }
+
+    <div class="movie-grid">
+      @for (movie of displayed; track movie.id) {
+        <ion-card class="movie-card">
+          <div class="poster-wrap">
+            @if (movie.posterUrl) {
+              <img [src]="movie.posterUrl" [alt]="movie.title" loading="lazy" />
+            } @else {
+              <div class="no-poster">
+                <ion-icon name="film-outline"></ion-icon>
+              </div>
+            }
+            <ion-button
+              fill="clear"
+              class="fav-btn"
+              [disabled]="pending.has(movie.id)"
+              (click)="toggleFavorite(movie)"
+              [attr.aria-label]="isFavorite(movie) ? 'Retirer de la playlist' : 'Ajouter à la playlist'"
+            >
+              <ion-icon
+                slot="icon-only"
+                [name]="isFavorite(movie) ? 'heart' : 'heart-outline'"
+                [color]="isFavorite(movie) ? 'danger' : 'light'"
+              ></ion-icon>
+            </ion-button>
+          </div>
+          <ion-card-header>
+            <ion-card-title>{{ movie.title }}</ion-card-title>
+            @if (movie.releaseDate) {
+              <ion-card-subtitle>{{ movie.releaseDate }}</ion-card-subtitle>
+            }
+          </ion-card-header>
+          <ion-card-content>
+            <p class="overview">{{ movie.overview || 'Pas de description.' }}</p>
+          </ion-card-content>
+        </ion-card>
+      }
+    </div>
+
+    @if (!searching && displayed.length === 0) {
+      <p class="empty">Aucun film à afficher.</p>
+    }
+  }
+</ion-content>

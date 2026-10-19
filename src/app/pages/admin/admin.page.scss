@@ -1,0 +1,41 @@
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px 0 20px;
+}
+
+ion-thumbnail {
+  --size: 56px;
+  --border-radius: 8px;
+}
+
+ion-thumbnail img {
+  object-fit: cover;
+}
+
+ion-thumbnail ion-icon {
+  font-size: 1.6rem;
+  color: var(--ion-color-medium);
+}
+
+ion-badge {
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+ion-avatar ion-icon {
+  width: 100%;
+  height: 100%;
+  color: var(--ion-color-medium);
+}
+
+ion-avatar img {
+  object-fit: cover;
+}

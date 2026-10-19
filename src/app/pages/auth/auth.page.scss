@@ -1,0 +1,43 @@
+.auth-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.brand {
+  text-align: center;
+  font-weight: 700;
+  color: var(--ion-color-primary);
+  margin: 8px 0 20px;
+}
+
+.photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+
+  .avatar-preview {
+    width: 120px;
+    height: 120px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--ion-color-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 3px solid var(--ion-color-primary);
+    cursor: pointer;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    ion-icon {
+      color: var(--ion-color-medium);
+    }
+  }
+}
