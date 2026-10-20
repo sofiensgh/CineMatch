@@ -1,5 +1,5 @@
-<ion-header>
-  <ion-toolbar color="primary">
+<ion-header class="ion-no-border">
+  <ion-toolbar>
     <ion-title>Administration</ion-title>
   </ion-toolbar>
   <ion-toolbar>
@@ -17,14 +17,14 @@
 <ion-content class="ion-padding">
   @if (tab === 'movies') {
     <form #movieForm="ngForm" (ngSubmit)="addMovie(movieForm)">
-      <ion-list>
+      <ion-list class="panel form-panel">
         <ion-list-header>
           <ion-label>Ajouter un film</ion-label>
         </ion-list-header>
-        <ion-item>
+        <ion-item class="field" lines="none">
           <ion-input label="Titre *" labelPlacement="floating" name="title" [(ngModel)]="newMovie.title" required></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item class="field" lines="none">
           <ion-textarea
             label="Synopsis"
             labelPlacement="floating"
@@ -33,7 +33,7 @@
             [(ngModel)]="newMovie.overview"
           ></ion-textarea>
         </ion-item>
-        <ion-item>
+        <ion-item class="field" lines="none">
           <ion-input
             label="URL de l'affiche"
             labelPlacement="floating"
@@ -42,7 +42,7 @@
             [(ngModel)]="newMovie.posterUrl"
           ></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item class="field" lines="none">
           <ion-input
             label="Date de sortie"
             labelPlacement="stacked"
@@ -54,7 +54,7 @@
       </ion-list>
 
       <div class="actions">
-        <ion-button expand="block" type="submit" [disabled]="saving">
+        <ion-button expand="block" type="submit" class="gradient" [disabled]="saving">
           <ion-icon slot="start" name="add-outline"></ion-icon>
           Ajouter au catalogue
         </ion-button>
@@ -69,7 +69,7 @@
       </div>
     </form>
 
-    <ion-list>
+    <ion-list class="panel">
       <ion-list-header>
         <ion-label>Catalogue</ion-label>
       </ion-list-header>
@@ -77,7 +77,7 @@
         <div class="center"><ion-spinner name="crescent"></ion-spinner></div>
       }
       @for (movie of movies; track movie.id) {
-        <ion-item>
+        <ion-item lines="full">
           <ion-thumbnail slot="start">
             @if (movie.posterUrl) {
               <img [src]="movie.posterUrl" [alt]="movie.title" />
@@ -106,9 +106,9 @@
     @if (loadingUsers) {
       <div class="center"><ion-spinner name="crescent"></ion-spinner></div>
     }
-    <ion-list>
+    <ion-list class="panel">
       @for (user of users; track user.uid) {
-        <ion-item>
+        <ion-item lines="full">
           <ion-avatar slot="start">
             @if (user.photoUrl) {
               <img [src]="user.photoUrl" [alt]="user.prenom" />

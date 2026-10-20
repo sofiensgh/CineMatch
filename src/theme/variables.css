@@ -1,10 +1,55 @@
-/**
- * Ionic Dark Theme
- * -----------------------------------------------------
- * For more info, please see:
- * https://ionicframework.com/docs/theming/dark-mode
- */
+@import "@ionic/angular/css/palettes/dark.always.css";
 
-/* @import "@ionic/angular/css/palettes/dark.always.css"; */
-/* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+:root {
+  --cm-bg: #0b0b12;
+  --cm-surface: #15151f;
+  --cm-surface-2: #1d1d2a;
+  --cm-border: rgba(255, 255, 255, 0.08);
+  --cm-text-muted: #9a9ab0;
+  --cm-gradient: linear-gradient(135deg, #ff3d57 0%, #ff7a45 100%);
+  --cm-radius: 16px;
+
+  --ion-font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  --ion-color-primary: #ff3d57;
+  --ion-color-primary-rgb: 255, 61, 87;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #e0364d;
+  --ion-color-primary-tint: #ff5068;
+
+  --ion-color-secondary: #ffb703;
+  --ion-color-secondary-rgb: 255, 183, 3;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-contrast-rgb: 0, 0, 0;
+  --ion-color-secondary-shade: #e0a103;
+  --ion-color-secondary-tint: #ffbe1c;
+
+  --ion-color-tertiary: #8b5cf6;
+  --ion-color-tertiary-rgb: 139, 92, 246;
+  --ion-color-tertiary-contrast: #ffffff;
+  --ion-color-tertiary-contrast-rgb: 255, 255, 255;
+  --ion-color-tertiary-shade: #7a51d8;
+  --ion-color-tertiary-tint: #976cf7;
+
+  --ion-color-success: #2dd4bf;
+  --ion-color-success-rgb: 45, 212, 191;
+  --ion-color-success-contrast: #000000;
+  --ion-color-success-contrast-rgb: 0, 0, 0;
+  --ion-color-success-shade: #28bba8;
+  --ion-color-success-tint: #42d8c5;
+
+  --ion-background-color: var(--cm-bg);
+  --ion-background-color-rgb: 11, 11, 18;
+  --ion-text-color: #f4f4f8;
+  --ion-text-color-rgb: 244, 244, 248;
+  --ion-toolbar-background: var(--cm-bg);
+  --ion-toolbar-border-color: transparent;
+  --ion-tab-bar-background: rgba(21, 21, 31, 0.92);
+  --ion-tab-bar-border-color: var(--cm-border);
+  --ion-tab-bar-color: var(--cm-text-muted);
+  --ion-tab-bar-color-selected: var(--ion-color-primary);
+  --ion-item-background: transparent;
+  --ion-card-background: var(--cm-surface);
+  --ion-border-color: var(--cm-border);
+}

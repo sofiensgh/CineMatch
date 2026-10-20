@@ -19,6 +19,7 @@ import {
   setDoc,
   updateDoc
 } from '@angular/fire/firestore';
+import { Capacitor } from '@capacitor/core';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Observable, catchError, map, of, shareReplay, switchMap } from 'rxjs';
 
@@ -61,16 +62,79 @@ export class AuthService {
   }
 
   async takePhoto(): Promise<string> {
+    if (!Capacitor.isNativePlatform()) {
+      const file = await this.pickWebPhoto();
+      return this.fileToDataUrl(file, 320);
+    }
+
     const photo = await Camera.getPhoto({
       source: CameraSource.Camera,
       resultType: CameraResultType.DataUrl,
       quality: 70,
       width: 600,
-      correctOrientation: true,
-      webUseInput: true
+      correctOrientation: true
     });
     if (!photo.dataUrl) throw new Error('Aucune photo récupérée.');
     return this.resize(photo.dataUrl, 320);
+  }
+
+  private pickWebPhoto(): Promise<File> {
+    return new Promise((resolve, reject) => {
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.setAttribute('capture', 'user');
+      input.style.display = 'none';
+      const done = () => input.remove();
+      input.addEventListener(
+        'change',
+        () => {
+          const file = input.files?.[0];
+          done();
+          if (file) resolve(file);
+          else reject(new Error('cancelled'));
+        },
+        { once: true }
+      );
+      input.addEventListener(
+        'cancel',
+        () => {
+          done();
+          reject(new Error('cancelled'));
+        },
+        { once: true }
+      );
+      document.body.appendChild(input);
+      input.click();
+    });
+  }
+
+  private async fileToDataUrl(file: File, maxSize: number): Promise<string> {
+    try {
+      const probe = await createImageBitmap(file);
+      const scale = Math.min(1, maxSize / Math.max(probe.width, probe.height));
+      const width = Math.max(1, Math.round(probe.width * scale));
+      const height = Math.max(1, Math.round(probe.height * scale));
+      probe.close();
+      const bitmap = await createImageBitmap(file, {
+        resizeWidth: width,
+        resizeHeight: height,
+        resizeQuality: 'medium'
+      });
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      canvas.getContext('2d')?.drawImage(bitmap, 0, 0);
+      bitmap.close();
+      return canvas.toDataURL('image/jpeg', 0.75);
+    } catch {
+      const url = URL.createObjectURL(file);
+      try {
+        return await this.resize(url, maxSize);
+      } finally {
+        URL.revokeObjectURL(url);
+      }
+    }
   }
 
   async register(email: string, password: string, profile: NewUserProfile): Promise<void> {

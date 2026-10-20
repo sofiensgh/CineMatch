@@ -4,15 +4,12 @@ import { Router } from '@angular/router';
 import {
   IonButton,
   IonContent,
-  IonHeader,
   IonIcon,
   IonInput,
   IonItem,
   IonList,
   IonNote,
   IonSpinner,
-  IonTitle,
-  IonToolbar,
   ToastController
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -27,9 +24,6 @@ import { errorMessage } from '../../utils/firebase-errors';
   styleUrls: ['./auth.page.scss'],
   imports: [
     FormsModule,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     IonList,
     IonItem,
@@ -54,22 +48,69 @@ export class AuthPage {
   password = '';
   photoUrl = '';
 
+  private static readonly DRAFT_KEY = 'cinematch-signup-draft';
+
   constructor() {
     addIcons({ cameraOutline });
+    this.restoreDraft();
   }
 
   toggleMode(form: NgForm): void {
     this.isLoginMode = !this.isLoginMode;
     form.resetForm({ email: this.email });
     this.password = '';
+    this.clearDraft();
   }
 
   async capturePhoto(): Promise<void> {
+    this.saveDraft();
     try {
       this.photoUrl = await this.auth.takePhoto();
+      this.saveDraft();
     } catch (e) {
       const message = errorMessage(e, '');
       if (!/cancel/i.test(message)) await this.showToast(message || 'Impossible de prendre la photo.');
+    }
+  }
+
+  private saveDraft(): void {
+    try {
+      sessionStorage.setItem(
+        AuthPage.DRAFT_KEY,
+        JSON.stringify({
+          nom: this.nom,
+          prenom: this.prenom,
+          age: this.age,
+          email: this.email,
+          photoUrl: this.photoUrl
+        })
+      );
+    } catch {
+      return;
+    }
+  }
+
+  private restoreDraft(): void {
+    try {
+      const raw = sessionStorage.getItem(AuthPage.DRAFT_KEY);
+      if (!raw) return;
+      const draft = JSON.parse(raw);
+      this.isLoginMode = false;
+      this.nom = draft.nom ?? '';
+      this.prenom = draft.prenom ?? '';
+      this.age = draft.age ?? null;
+      this.email = draft.email ?? '';
+      this.photoUrl = draft.photoUrl ?? '';
+    } catch {
+      this.clearDraft();
+    }
+  }
+
+  private clearDraft(): void {
+    try {
+      sessionStorage.removeItem(AuthPage.DRAFT_KEY);
+    } catch {
+      return;
     }
   }
 
@@ -97,6 +138,7 @@ export class AuthPage {
       }
       form.resetForm();
       this.photoUrl = '';
+      this.clearDraft();
       await this.router.navigateByUrl('/tabs/home', { replaceUrl: true });
     } catch (e) {
       await this.showToast(errorMessage(e));

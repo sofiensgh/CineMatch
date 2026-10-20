@@ -1,52 +1,64 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>Mon profil</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
+<ion-content>
   @if (currentUser$ | async; as user) {
+    <div class="cover">
+      <div class="cover-glow"></div>
+    </div>
+
     <div class="profile-head">
-      <ion-avatar>
-        @if (user.photoUrl) {
-          <img [src]="user.photoUrl" [alt]="user.prenom" />
-        } @else {
-          <ion-icon name="person-circle-outline"></ion-icon>
-        }
-      </ion-avatar>
-      <ion-button size="small" fill="outline" [disabled]="updatingPhoto" (click)="changePhoto(user)">
-        <ion-icon slot="start" name="camera-outline"></ion-icon>
-        Changer la photo
-      </ion-button>
+      <div class="avatar-wrap">
+        <ion-avatar>
+          @if (user.photoUrl) {
+            <img [src]="user.photoUrl" [alt]="user.prenom" />
+          } @else {
+            <ion-icon name="person-circle-outline"></ion-icon>
+          }
+        </ion-avatar>
+        <button class="photo-btn" type="button" [disabled]="updatingPhoto" (click)="changePhoto(user)" aria-label="Changer la photo">
+          <ion-icon name="camera-outline"></ion-icon>
+        </button>
+      </div>
       <h2>{{ user.prenom }} {{ user.nom }}</h2>
       <ion-badge [color]="user.role === 'admin' ? 'tertiary' : 'medium'">
-        {{ user.role === 'admin' ? 'Administrateur' : 'Utilisateur' }}
+        {{ user.role === 'admin' ? 'Administrateur' : 'Cinéphile' }}
       </ion-badge>
     </div>
 
-    <ion-list>
-      <ion-item>
-        <ion-icon slot="start" name="mail-outline"></ion-icon>
-        <ion-label>Email</ion-label>
-        <ion-note slot="end">{{ user.email }}</ion-note>
-      </ion-item>
-      <ion-item>
-        <ion-icon slot="start" name="person-outline"></ion-icon>
-        <ion-label>Âge</ion-label>
-        <ion-note slot="end">{{ user.age }} ans</ion-note>
-      </ion-item>
-      <ion-item>
-        <ion-icon slot="start" name="heart-outline"></ion-icon>
-        <ion-label>Films favoris</ion-label>
-        <ion-note slot="end">{{ user.favorites.length }}</ion-note>
-      </ion-item>
-    </ion-list>
+    <div class="stats">
+      <div class="stat">
+        <strong>{{ user.favorites.length }}</strong>
+        <span>Favoris</span>
+      </div>
+      <div class="stat">
+        <strong>{{ user.age }}</strong>
+        <span>Ans</span>
+      </div>
+    </div>
 
-    <ion-button expand="block" color="danger" (click)="logout()" class="logout">
-      <ion-icon slot="start" name="log-out-outline"></ion-icon>
-      Se déconnecter
-    </ion-button>
+    <div class="ion-padding">
+      <ion-list class="panel">
+        <ion-item lines="full">
+          <ion-icon slot="start" name="mail-outline" color="primary"></ion-icon>
+          <ion-label>Email</ion-label>
+          <ion-note slot="end">{{ user.email }}</ion-note>
+        </ion-item>
+        <ion-item lines="full">
+          <ion-icon slot="start" name="person-outline" color="primary"></ion-icon>
+          <ion-label>Âge</ion-label>
+          <ion-note slot="end">{{ user.age }} ans</ion-note>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-icon slot="start" name="heart-outline" color="primary"></ion-icon>
+          <ion-label>Films favoris</ion-label>
+          <ion-note slot="end">{{ user.favorites.length }}</ion-note>
+        </ion-item>
+      </ion-list>
+
+      <ion-button expand="block" fill="outline" color="danger" (click)="logout()" class="logout">
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        Se déconnecter
+      </ion-button>
+    </div>
   } @else {
-    <p class="loading">Chargement du profil…</p>
+    <div class="center"><p class="loading">Chargement du profil…</p></div>
   }
 </ion-content>

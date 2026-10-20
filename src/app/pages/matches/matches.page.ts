@@ -2,7 +2,6 @@ import { Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import {
   IonAvatar,
-  IonBadge,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -57,7 +56,6 @@ interface MatchesState {
     IonCardTitle,
     IonCardContent,
     IonAvatar,
-    IonBadge,
     IonProgressBar,
     IonChip,
     IonLabel

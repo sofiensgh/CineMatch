@@ -1,34 +1,88 @@
-.hint {
-  display: block;
-  margin: 8px 0 16px;
+.intro {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  border-radius: var(--cm-radius);
+  background: linear-gradient(135deg, rgba(255, 61, 87, 0.18), rgba(139, 92, 246, 0.18));
+  border: 1px solid var(--cm-border);
+
+  ion-icon {
+    font-size: 1.8rem;
+    color: var(--ion-color-primary);
+    flex-shrink: 0;
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+}
+
+.match-card {
+  margin-bottom: 16px;
 }
 
 .match-head {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 8px;
-}
-
-.match-head .names {
-  flex: 1;
+  margin-bottom: 12px;
 }
 
 ion-avatar {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
+  border: 2px solid var(--ion-color-primary);
+
+  img {
+    object-fit: cover;
+  }
+
+  ion-icon {
+    width: 100%;
+    height: 100%;
+    color: var(--cm-text-muted);
+  }
 }
 
-ion-avatar img {
-  object-fit: cover;
+.names {
+  flex: 1;
+  min-width: 0;
+
+  ion-card-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
 }
 
-ion-card-title {
-  font-size: 1.1rem;
+.rate {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: conic-gradient(var(--ion-color-success) calc(var(--rate) * 1%), var(--cm-surface-2) 0);
+
+  span {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--cm-surface);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--ion-color-success);
+  }
 }
 
 ion-progress-bar {
-  margin-top: 6px;
+  height: 6px;
+  border-radius: 6px;
+  --background: var(--cm-surface-2);
+  --progress-background: var(--cm-gradient);
 }
 
 .common-count {
@@ -36,39 +90,11 @@ ion-progress-bar {
   align-items: center;
   gap: 6px;
   margin: 0 0 8px;
-  color: var(--ion-color-medium);
+  color: var(--cm-text-muted);
 }
 
 .chips {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-}
-
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 60%;
-  color: var(--ion-color-medium);
-  padding: 24px;
-}
-
-.empty ion-icon {
-  font-size: 3.5rem;
-  margin-bottom: 8px;
-}
-
-.center {
-  display: flex;
-  justify-content: center;
-  margin: 24px 0;
-}
-
-ion-avatar ion-icon {
-  width: 100%;
-  height: 100%;
-  color: var(--ion-color-medium);
 }

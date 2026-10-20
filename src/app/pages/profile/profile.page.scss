@@ -1,36 +1,111 @@
+.cover {
+  position: relative;
+  height: calc(env(safe-area-inset-top) + 150px);
+  background: var(--cm-gradient);
+  overflow: hidden;
+}
+
+.cover-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.7), transparent 60%);
+}
+
 .profile-head {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  margin: 16px 0 24px;
+  margin-top: -60px;
+
+  h2 {
+    margin: 6px 0 0;
+    font-weight: 700;
+  }
 }
 
-.profile-head ion-avatar {
-  width: 110px;
-  height: 110px;
+.avatar-wrap {
+  position: relative;
 }
 
-.profile-head img {
-  object-fit: cover;
+.avatar-wrap ion-avatar {
+  width: 120px;
+  height: 120px;
+  border: 4px solid var(--cm-bg);
+  background: var(--cm-surface-2);
+
+  img {
+    object-fit: cover;
+  }
+
+  ion-icon {
+    width: 100%;
+    height: 100%;
+    color: var(--cm-text-muted);
+  }
 }
 
-.profile-head h2 {
-  margin: 0;
+.photo-btn {
+  position: absolute;
+  right: 2px;
+  bottom: 6px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 3px solid var(--cm-bg);
+  background: var(--ion-color-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.6;
+  }
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px 16px 4px;
+}
+
+.stat {
+  flex: 1;
+  max-width: 160px;
+  text-align: center;
+  padding: 12px;
+  border-radius: var(--cm-radius);
+  background: var(--cm-surface);
+  border: 1px solid var(--cm-border);
+
+  strong {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
+
+  span {
+    font-size: 0.8rem;
+    color: var(--cm-text-muted);
+  }
+}
+
+ion-note[slot='end'] {
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .logout {
-  margin-top: 24px;
+  margin-top: 8px;
 }
 
 .loading {
-  text-align: center;
-  color: var(--ion-color-medium);
+  color: var(--cm-text-muted);
   margin-top: 40px;
-}
-
-.profile-head ion-avatar ion-icon {
-  width: 100%;
-  height: 100%;
-  color: var(--ion-color-medium);
 }

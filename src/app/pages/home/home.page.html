@@ -1,8 +1,8 @@
-<ion-header>
-  <ion-toolbar color="primary">
-    <ion-title>CineMatch</ion-title>
-  </ion-toolbar>
+<ion-header class="ion-no-border">
   <ion-toolbar>
+    <ion-title class="brand-title">CineMatch</ion-title>
+  </ion-toolbar>
+  <ion-toolbar class="search-toolbar">
     <ion-searchbar
       placeholder="Rechercher un film"
       [debounce]="250"
@@ -13,21 +13,26 @@
 
 <ion-content class="ion-padding">
   @if (loading) {
-    <div class="center"><ion-spinner name="crescent"></ion-spinner></div>
+    <div class="center"><ion-spinner name="crescent" color="primary"></ion-spinner></div>
   } @else {
-    <ion-note class="hint">
-      @if (query.trim()) {
-        {{ displayed.length }} résultat(s) pour « {{ query }} »
-      } @else {
-        {{ displayed.length }} film(s) disponibles
-      }
-      @if (!tmdbEnabled) {
-        · catalogue CineMatch
-      }
-    </ion-note>
+    <div class="list-head">
+      <h2 class="section-title">
+        @if (query.trim()) {
+          Résultats
+        } @else {
+          À l'affiche
+        }
+      </h2>
+      <ion-note>
+        {{ displayed.length }} film(s)
+        @if (!tmdbEnabled) {
+          · catalogue CineMatch
+        }
+      </ion-note>
+    </div>
 
     @if (searching) {
-      <div class="center"><ion-spinner name="dots"></ion-spinner></div>
+      <div class="center"><ion-spinner name="dots" color="primary"></ion-spinner></div>
     }
 
     <div class="movie-grid">
@@ -41,9 +46,11 @@
                 <ion-icon name="film-outline"></ion-icon>
               </div>
             }
+            <div class="poster-shade"></div>
             <ion-button
               fill="clear"
               class="fav-btn"
+              [class.active]="isFavorite(movie)"
               [disabled]="pending.has(movie.id)"
               (click)="toggleFavorite(movie)"
               [attr.aria-label]="isFavorite(movie) ? 'Retirer de la playlist' : 'Ajouter à la playlist'"
@@ -51,16 +58,17 @@
               <ion-icon
                 slot="icon-only"
                 [name]="isFavorite(movie) ? 'heart' : 'heart-outline'"
-                [color]="isFavorite(movie) ? 'danger' : 'light'"
               ></ion-icon>
             </ion-button>
+            <div class="poster-info">
+              <ion-card-header>
+                <ion-card-title>{{ movie.title }}</ion-card-title>
+                @if (movie.releaseDate) {
+                  <ion-card-subtitle>{{ movie.releaseDate.slice(0, 4) }}</ion-card-subtitle>
+                }
+              </ion-card-header>
+            </div>
           </div>
-          <ion-card-header>
-            <ion-card-title>{{ movie.title }}</ion-card-title>
-            @if (movie.releaseDate) {
-              <ion-card-subtitle>{{ movie.releaseDate }}</ion-card-subtitle>
-            }
-          </ion-card-header>
           <ion-card-content>
             <p class="overview">{{ movie.overview || 'Pas de description.' }}</p>
           </ion-card-content>
@@ -69,7 +77,11 @@
     </div>
 
     @if (!searching && displayed.length === 0) {
-      <p class="empty">Aucun film à afficher.</p>
+      <div class="empty">
+        <ion-icon name="film-outline"></ion-icon>
+        <h3>Aucun film</h3>
+        <p>Essayez une autre recherche.</p>
+      </div>
     }
   }
 </ion-content>

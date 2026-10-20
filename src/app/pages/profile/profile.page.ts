@@ -6,14 +6,11 @@ import {
   IonBadge,
   IonButton,
   IonContent,
-  IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonNote,
-  IonTitle,
-  IonToolbar,
   ToastController
 } from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -36,9 +33,6 @@ import { errorMessage } from '../../utils/firebase-errors';
   styleUrls: ['./profile.page.scss'],
   imports: [
     AsyncPipe,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
     IonContent,
     IonAvatar,
     IonBadge,
